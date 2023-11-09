@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchellingModel", "SchellingModel\SchellingModel.csproj", "{1CB53E0B-8C9B-42D2-845E-B3735F6F13EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1CB53E0B-8C9B-42D2-845E-B3735F6F13EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CB53E0B-8C9B-42D2-845E-B3735F6F13EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CB53E0B-8C9B-42D2-845E-B3735F6F13EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CB53E0B-8C9B-42D2-845E-B3735F6F13EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7D9303A3-D521-4F33-AE40-42EA7AA96146}
+	EndGlobalSection
+EndGlobal
