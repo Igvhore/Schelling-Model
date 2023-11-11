@@ -11,6 +11,8 @@ namespace SchellingModel
 
         private string _colour;
         private bool _status;
+        private int _x;
+        private int _y;
         public List<Cell> neighbours;
 
         public Cell()
@@ -61,9 +63,28 @@ namespace SchellingModel
             _status = status;
             this.neighbours = neighbours;
         }
+        public Cell(int x, int y)
+        {
+            _colour = "Unknown";
+            _x = x;
+            _y = y;
+            _status = false;
+            neighbours = new List<Cell>();
+        }
 
+        public void SetCoordinates(int x, int y)
+        {
+            this._x = x;
+            this._y = y;
+        }
+        public int[] GetCoordinates()
+        {
+            return new int[2] { this._x, this._y };
+          
+        }
         public void SetColour(string colour) { _colour = colour; }
         public void SetStatus(bool status) { _status = status; }
-        public string GetColour() => this._colour; 
+        public string GetColour() => this._colour;
+        public bool GetStatus() => this._status;
     }
 }

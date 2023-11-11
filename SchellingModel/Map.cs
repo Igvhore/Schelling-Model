@@ -13,6 +13,7 @@ namespace SchellingModel
     {
         private uint _size;
         private Cell[,] _cells;
+        
         private double amountOfMembersInFirstGroup;
         private double amountOfMembersInSecondGroup;    
 
@@ -37,7 +38,7 @@ namespace SchellingModel
 
         }
         public uint GetSize() => _size;
-        private void Split(string percentage)
+        private void _Split(string percentage)
         {
             try
             {
@@ -53,7 +54,7 @@ namespace SchellingModel
             {
                 Console.WriteLine($"Ошибка! {e.Message}");
                 Console.Write("Введите процент еще раз: ");
-                Split(Console.ReadLine());
+                _Split(Console.ReadLine());
             }
         }
         public void GenerateCells (int endPoint, string colour)
@@ -66,6 +67,7 @@ namespace SchellingModel
                     if (_cells[i, j].GetColour() == "Unknown" && endPoint > 0)
                     {
                         _cells[i, j].SetColour(colour);
+                        _cells[i, j].SetStatus(true);
                         endPoint--;
                     }
 
@@ -74,20 +76,20 @@ namespace SchellingModel
                                  
             }
         }
-        private void Swap (Cell[,] cells, int a_i, int a_j, int b_i, int b_j)
+        private void _Swap (Cell cell1, Cell cell2)
         {
-            Cell temp = cells[a_i,a_j];
-            cells[a_i, a_j] = cells[b_i, b_j];
-            cells[b_i, b_j] = temp;
+            Cell temp = cell1;
+            cell1.SetCoordinates(cell2.GetCoordinates()[0], cell2.GetCoordinates()[1]);
+            cell2.SetCoordinates(temp.GetCoordinates()[0], temp.GetCoordinates()[1]);
         }
-        private void Shaffle(Cell[,] cells)
+        private void _Shaffle(Cell[,] cells)
         {
             Random rnd = new Random(DateTime.Now.Second + DateTime.Now.Minute + DateTime.Now.Hour);
 
             for (int i = 0; i < _size; i++)
             {
                 for (int j = 0; j < _size; j++)
-                   Swap(cells,i,j,rnd.Next(0,(int)_size-1), rnd.Next(0, (int)_size - 1));               
+                    _Swap(cells[i,j], cells[rnd.Next(0, (int)_size - 1), rnd.Next(0, (int)_size - 1)]);             
             }
         }
         public void CreateMap()
@@ -97,15 +99,15 @@ namespace SchellingModel
             {
                 for (int j = 0; j < _size; j++)
                 {
-                    _cells[i, j] = new Cell();                  
+                    _cells[i, j] = new Cell(i, j);                  
                 }
             }
 
             Console.Write("Введите процент разделения: ");
-            this.Split(Console.ReadLine());
+            this._Split(Console.ReadLine());
             this.GenerateCells((int)this.amountOfMembersInFirstGroup, "Red");
             this.GenerateCells((int)this.amountOfMembersInSecondGroup, "Blue");
-            Shaffle(_cells);
+            _Shaffle(_cells);
         }
         public void PrintMap()
         {
@@ -116,6 +118,21 @@ namespace SchellingModel
                 
 
                 Console.WriteLine("\n");
+            }
+
+        }
+        public void FixStatus(Cell[,] cells)
+        {
+            for (int i = 0; i < _size; i++)
+            {
+                for (int j = 0; j < _size; j++)
+                {
+                    if (cells[i,j].GetStatus() == false)
+                    {
+
+                    }
+                
+                }
             }
 
         }
