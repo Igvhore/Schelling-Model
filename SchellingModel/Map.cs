@@ -190,8 +190,10 @@ namespace SchellingModel
                     else if (_cells[i, j].GetColour() == "B" & _cells[i, j].B_neighbours >= 2)
                         _cells[i, j].SetStatus(true);
                     else if (_cells[i, j].GetColour() != "U")
+                    {
+                        _cells[i, j].SetStatus(false);
                         unhappies.Add(_cells[i, j]);
-
+                    }                      
                     _cells[i, j].R_neighbours = 0;
                     _cells[i, j].B_neighbours = 0;
                 }
