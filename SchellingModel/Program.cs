@@ -8,20 +8,13 @@
             Console.Write("Введите размер карты (минимальный размер равен 3): ");
             map.SetSize(Console.ReadLine());
             map.CreateMap();           
-            Console.WriteLine("Test-------------------------------------");    
+            Console.WriteLine("Начало работы алгоритма");    
             map.DetectStatus();
-            map.PrintStatus();
-            //map.PrintNeighbours(4, 4);
-
-            //List<Cell> cells = map.DetectStatus();
-            //foreach (Cell cell in cells) 
-            //{ 
-            //    Console.WriteLine(cell.x);
-            //    Console.Write(cell.y);
-            //}
-
+            Console.WriteLine("Статус для каждой клетки:");
+            map.PrintMap();
             map.SwapUnhappy();
-            map.PrintStatus();
+            Console.WriteLine("Статус для каждой клетки после работы алгоритма:");
+            map.PrintMap(); 
            
         }
     }
