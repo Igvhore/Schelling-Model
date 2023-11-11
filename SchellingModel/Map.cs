@@ -71,25 +71,32 @@ namespace SchellingModel
                         endPoint--;
                     }
 
-
                 }
                                  
             }
         }
-        private void _Swap (Cell[,] cells, int a_i, int a_j, int b_i, int b_j)
+        private void SwapCellByIndex (int a_i, int a_j, int b_i, int b_j)
         {
-            Cell temp = cells[a_i,a_j];
-            cells[a_i, a_j] = cells[b_i, b_j];
-            cells[b_i, b_j] = temp;
+            Cell temp = _cells[a_i,a_j];
+            _cells[a_i, a_j] = _cells[b_i, b_j];
+            _cells[b_i, b_j] = temp;
         }
-        private void _Shaffle(Cell[,] cells)
+
+        private void SwapCell(Cell cl1, Cell cl2)
+        {
+            Cell temp = cl1;
+            cl1 = cl2;
+            cl2 = temp;
+        }
+
+        private void Shaffle()
         {
             Random rnd = new Random(DateTime.Now.Second + DateTime.Now.Minute + DateTime.Now.Hour);
 
             for (int i = 0; i < _size; i++)
             {
                 for (int j = 0; j < _size; j++)
-                   _Swap(cells,i,j,rnd.Next(0,(int)_size-1), rnd.Next(0, (int)_size - 1));               
+                    SwapCellByIndex(i,j,rnd.Next(0,(int)_size-1), rnd.Next(0, (int)_size - 1));               
             }
         }
         public void CreateMap()
@@ -104,10 +111,10 @@ namespace SchellingModel
             }
 
             Console.Write("Введите процент разделения: ");
-            this._Split(Console.ReadLine());
+            this.Split(Console.ReadLine());
             this.GenerateCells((int)this.amountOfMembersInFirstGroup, "R");
             this.GenerateCells((int)this.amountOfMembersInSecondGroup, "B");
-            _Shaffle(_cells);
+            Shaffle();
         }
         public void PrintMap()
         {
@@ -120,6 +127,166 @@ namespace SchellingModel
                 Console.WriteLine("\n");
             }
 
+        }
+
+        public void CreateNeighbours() //Не доделано, не использовать!
+        {
+            for (int i = 0; i < _size; i++)
+                for (int j = 0; j < _size; j++)
+                {
+                    if (i == 0 & j == 0)
+                    {
+                        _cells[i, j].neighbours.Add(_cells[i + 1, j]);
+                        _cells[i, j].neighbours.Add(_cells[i, j + 1]);
+                        _cells[i, j].neighbours.Add(_cells[i + 1, j + 1]);
+                    }
+                    
+                    if(i == 0 & j > 0 & j < _size - 1)
+                    {
+                        _cells[i, j].neighbours.Add(_cells[i, j - 1]);
+                        _cells[i, j].neighbours.Add(_cells[i, j + 1]);
+                        _cells[i, j].neighbours.Add(_cells[i +1, j - 1]);
+                        _cells[i, j].neighbours.Add(_cells[i + 1, j]);
+                        _cells[i, j].neighbours.Add(_cells[i + 1, j + 1]);
+                    }
+
+                    if(i == 0 & j == _size - 1)
+                    {
+                        _cells[i, j].neighbours.Add(_cells[i, j - 1]);
+                        _cells[i, j].neighbours.Add(_cells[i + 1, j - 1]);
+                        _cells[i, j].neighbours.Add(_cells[i + 1, j]);
+                    }
+
+                }
+        }
+
+        public void CreateNeighboursTry()
+        {
+            for (int i = 0; i < _size; i++)
+                for (int j = 0; j < _size; j++)
+                {
+                    try
+                    {
+                        _cells[i, j].neighbours.Add(_cells[i - 1, j]);
+                    }
+                    catch { }
+                    try
+                    {
+                        _cells[i, j].neighbours.Add(_cells[i - 1, j + 1]);
+                    }
+                    catch { }
+                    try
+                    {
+                        _cells[i, j].neighbours.Add(_cells[i - 1, j - 1]);
+                    }
+                    catch { }
+
+                    try
+                    {
+                        _cells[i, j].neighbours.Add(_cells[i, j - 1]);
+                    }
+                    catch { }
+                    try
+                    {
+                        _cells[i, j].neighbours.Add(_cells[i, j + 1]);
+                    }
+                    catch { }
+
+                    try
+                    {
+                        _cells[i, j].neighbours.Add(_cells[i + 1, j]);
+                    }
+                    catch { }
+                    try
+                    {
+                        _cells[i, j].neighbours.Add(_cells[i + 1, j + 1]);
+                    }
+                    catch { }
+                    try
+                    {
+                        _cells[i, j].neighbours.Add(_cells[i + 1, j - 1]);
+                    }
+                    catch { }
+                   
+                }
+        }
+
+
+        public List<Cell> DetectStatus()
+        {
+            CreateNeighboursTry();
+            List<Cell> unhappies = new List<Cell>();
+            for (int i = 0; i < _size; i++)
+                for (int j = 0; j < _size; j++)
+                {
+                    foreach (var neighbour in _cells[i, j].neighbours)
+                    {
+                        if (neighbour.GetColour() == "R") _cells[i, j].R_neighbours++;
+                        else if (neighbour.GetColour() == "B") _cells[i, j].B_neighbours++;
+                    }
+                    _cells[i, j].x = i;
+                    _cells[i, j].y = j;
+                    if (_cells[i, j].GetColour() == "R" & _cells[i, j].R_neighbours >= 2) _cells[i, j].SetStatus(true);
+                    else if (_cells[i, j].GetColour() == "B" & _cells[i, j].B_neighbours >= 2) _cells[i, j].SetStatus(true);
+                    else if(_cells[i, j].GetColour() != "U") unhappies.Add(_cells[i, j]);
+                }
+            return unhappies;
+        }
+
+        public List<Cell> DetectFreeSpace()
+        {
+            List<Cell> whites = new List<Cell>();
+            for (int i = 0; i < _size; i++)
+                for (int j = 0; j < _size; j++)
+                {
+     
+                    if (_cells[i, j].GetColour() == "U") whites.Add(_cells[i, j]); 
+                }
+            return whites;
+        }
+
+        public void SwapUnhappy()
+        {
+            List<Cell> unhappy = new List<Cell>();
+            List<Cell> whites = new List<Cell>();
+            Console.Write("Введите количество итераций: ");
+            int iteration = 3;
+            iteration = Convert.ToInt32(Console.ReadLine());
+            var random = new Random();
+            for(int i = 0; i < iteration; i++)
+            {
+                unhappy = DetectStatus();
+                whites = DetectFreeSpace();
+                if(unhappy.Count > 0 & whites.Count > 0)
+                {
+                    Cell cl1 = unhappy[random.Next(0, unhappy.Count)];
+                    Cell cl2 = whites[random.Next(0, whites.Count)];
+                    SwapCellByIndex(cl1.x, cl1.y, cl2.x, cl2.y);
+                }
+                
+                              
+            }
+        }
+
+        public void PrintStatus()
+        {
+            for (int i = 0; i < _size; i++)
+            {
+                for (int j = 0; j < _size; j++)
+                    Console.Write($"{Convert.ToInt32(_cells[i, j].GetStatus())} ");
+
+
+                Console.WriteLine("\n");
+            }
+
+        }
+
+        public void PrintNeighbours(int i, int j)
+        {
+            foreach(var neighbour in _cells[i,j].neighbours)
+            {
+                Console.WriteLine(neighbour.GetColour());
+            }
         }
         public void FixStatus(Cell[,] cells)
         {
