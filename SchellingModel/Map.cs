@@ -64,7 +64,7 @@ namespace SchellingModel
             {
                 for (int j = 0; j < _size; j++)
                 {
-                    if (_cells[i, j].GetColour() == "Unknown" && endPoint > 0)
+                    if (_cells[i, j].GetColour() == "U" && endPoint > 0)
                     {
                         _cells[i, j].SetColour(colour);
                         _cells[i, j].SetStatus(true);
@@ -76,11 +76,11 @@ namespace SchellingModel
                                  
             }
         }
-        private void _Swap (Cell cell1, Cell cell2)
+        private void _Swap (Cell[,] cells, int a_i, int a_j, int b_i, int b_j)
         {
-            Cell temp = cell1;
-            cell1.SetCoordinates(cell2.GetCoordinates()[0], cell2.GetCoordinates()[1]);
-            cell2.SetCoordinates(temp.GetCoordinates()[0], temp.GetCoordinates()[1]);
+            Cell temp = cells[a_i,a_j];
+            cells[a_i, a_j] = cells[b_i, b_j];
+            cells[b_i, b_j] = temp;
         }
         private void _Shaffle(Cell[,] cells)
         {
@@ -89,7 +89,7 @@ namespace SchellingModel
             for (int i = 0; i < _size; i++)
             {
                 for (int j = 0; j < _size; j++)
-                    _Swap(cells[i,j], cells[rnd.Next(0, (int)_size - 1), rnd.Next(0, (int)_size - 1)]);             
+                   _Swap(cells,i,j,rnd.Next(0,(int)_size-1), rnd.Next(0, (int)_size - 1));               
             }
         }
         public void CreateMap()
@@ -99,14 +99,14 @@ namespace SchellingModel
             {
                 for (int j = 0; j < _size; j++)
                 {
-                    _cells[i, j] = new Cell(i, j);                  
+                    _cells[i, j] = new Cell();                  
                 }
             }
 
             Console.Write("Введите процент разделения: ");
             this._Split(Console.ReadLine());
-            this.GenerateCells((int)this.amountOfMembersInFirstGroup, "Red");
-            this.GenerateCells((int)this.amountOfMembersInSecondGroup, "Blue");
+            this.GenerateCells((int)this.amountOfMembersInFirstGroup, "R");
+            this.GenerateCells((int)this.amountOfMembersInSecondGroup, "B");
             _Shaffle(_cells);
         }
         public void PrintMap()
@@ -128,8 +128,7 @@ namespace SchellingModel
                 for (int j = 0; j < _size; j++)
                 {
                     if (cells[i,j].GetStatus() == false)
-                    {
-
+                    { 
                     }
                 
                 }
