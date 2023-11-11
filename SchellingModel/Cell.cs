@@ -8,6 +8,7 @@ namespace SchellingModel
 {
     internal class Cell
     {
+
         private string _colour;
         private bool _status;
         public List<Cell> neighbours;
@@ -60,5 +61,9 @@ namespace SchellingModel
             _status = status;
             this.neighbours = neighbours;
         }
+
+        public void SetColour(string colour) { _colour = colour; }
+        public void SetStatus(bool status) { _status = status; }
+        public string GetColour() => this._colour; 
     }
 }

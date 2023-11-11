@@ -4,7 +4,12 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Map map = new Map();
+            Console.Write("Введите размер карты (минимальный размер равен 3): ");
+            map.SetSize(Console.ReadLine());
+            map.CreateMap();
+            map.PrintMap();
+
         }
     }
 }
