@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace SchellingModel
 
         }
         public uint GetSize() => _size;
-        public void Split(string percentage)
+        private void Split(string percentage)
         {
             try
             {
@@ -58,17 +59,37 @@ namespace SchellingModel
         public void GenerateCells (int endPoint, string colour)
         {
 
-            for (int i = 0; i < endPoint / 2; i++)
+            for (int i = 0; i < _size; i++)
             {
-                for (int j = 0; j < endPoint / 2; j++)
+                for (int j = 0; j < _size; j++)
                 {
-                    if (_cells[i, j].GetColour() == "Unknown")
+                    if (_cells[i, j].GetColour() == "Unknown" && endPoint > 0)
+                    {
                         _cells[i, j].SetColour(colour);
+                        endPoint--;
+                    }
+
+
                 }
                                  
             }
         }
+        private void Swap (Cell[,] cells, int a_i, int a_j, int b_i, int b_j)
+        {
+            Cell temp = cells[a_i,a_j];
+            cells[a_i, a_j] = cells[b_i, b_j];
+            cells[b_i, b_j] = temp;
+        }
+        private void Shaffle(Cell[,] cells)
+        {
+            Random rnd = new Random(DateTime.Now.Second + DateTime.Now.Minute + DateTime.Now.Hour);
 
+            for (int i = 0; i < _size; i++)
+            {
+                for (int j = 0; j < _size; j++)
+                   Swap(cells,i,j,rnd.Next(0,(int)_size-1), rnd.Next(0, (int)_size - 1));               
+            }
+        }
         public void CreateMap()
         {
             _cells = new Cell[_size, _size];
@@ -84,13 +105,13 @@ namespace SchellingModel
             this.Split(Console.ReadLine());
             this.GenerateCells((int)this.amountOfMembersInFirstGroup, "Red");
             this.GenerateCells((int)this.amountOfMembersInSecondGroup, "Blue");
-
+            Shaffle(_cells);
         }
         public void PrintMap()
         {
-            for (int i = 0; i < _size / 2; i++)
+            for (int i = 0; i < _size; i++)
             {
-                for (int j = 0; j < _size / 2; j++)                
+                for (int j = 0; j < _size; j++)                
                     Console.Write($"{_cells[i, j].GetColour()} ");
                 
 
